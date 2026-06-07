@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10,10,10,9">
+            <Button Content="Пк клубы" Click="OpenPcClubs" Height="26" Width="100" Background="Green" Margin="0,0,16,0"/>
+            <Button Content="Арендованные пк" Click="OpenPcRent" Height="26" Width="150" Background="Green"/>
+        </StackPanel>
+        <Frame x:Name="frame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="10,0,10,10" />
     </Grid>
 </Window>
