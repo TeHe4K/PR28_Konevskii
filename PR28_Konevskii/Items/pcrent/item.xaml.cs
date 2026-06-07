@@ -26,7 +26,7 @@ namespace PR28_Konevskii.Items.pcrent
         }
 
         private void EditRecord(object sender, System.Windows.RoutedEventArgs e) =>
-            MainWindow.init.OpenPage(new Pages.pcrent.Add());
+            MainWindow.init.OpenPage(new Pages.pcrent.Add(items));
 
         private void DeleteRecord(object sender, System.Windows.RoutedEventArgs e)
         {

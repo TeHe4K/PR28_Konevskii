@@ -1,10 +1,9 @@
-﻿using Google.Protobuf.WellKnownTypes;
 using PR28_Konevskii.Classes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace PR28_Konevskii.Pages.pcrent
 {
@@ -15,18 +14,21 @@ namespace PR28_Konevskii.Pages.pcrent
     {
         List<pcclublContext> AllPcClubs = pcclublContext.Select();
         pcrentContext PcRent = null;
+
         public Add(pcrentContext pcrent = null)
         {
             InitializeComponent();
+
             foreach (var item in AllPcClubs)
                 pcclubs.Items.Add(item);
 
             pcclubs.Items.Add("Выберите");
 
-            if(pcrent != null)
+            if (pcrent != null)
             {
                 this.PcRent = pcrent;
-                pcclubs.SelectedIndex = AllPcClubs.FindIndex(x => x.id == pcrent.Id_PcClub);
+                int selectedIndex = AllPcClubs.FindIndex(x => x.id == pcrent.Id_PcClub);
+                pcclubs.SelectedIndex = selectedIndex >= 0 ? selectedIndex : pcclubs.Items.Count - 1;
                 FIO.Text = pcrent.FioRent;
                 date.SelectedDate = pcrent.DateRent.Date;
                 time.Text = pcrent.DateRent.ToString("HH:mm");
@@ -37,42 +39,43 @@ namespace PR28_Konevskii.Pages.pcrent
             {
                 pcclubs.SelectedIndex = pcclubs.Items.Count - 1;
             }
-            
         }
 
-        private void AddRecord(object sender, System.Windows.RoutedEventArgs e)
+        private void AddRecord(object sender, RoutedEventArgs e)
         {
-            DateTime dateStart;
             TimeSpan timeStart;
-            DateTime DateAndTimeStart;
-            DateTime timeRent;
-            if(FIO.Text == "")
+            TimeSpan rentDuration;
+
+            if (string.IsNullOrWhiteSpace(FIO.Text))
             {
                 MessageBox.Show("Необходимо указать ФИО клиента");
                 return;
             }
-            if(!(pcclubs.SelectedItem is pcclublContext selectedClubs))
+            if (!(pcclubs.SelectedItem is pcclublContext selectedClubs))
             {
                 MessageBox.Show("Выберите Пк клуб");
                 return;
             }
-            if (date.Text == "" || DateTime.TryParse(date.Text, out dateStart))
+            if (date.SelectedDate == null)
             {
                 MessageBox.Show("Необходимо указать дату начала аренды");
                 return;
             }
-            if (time.Text == "" || TimeSpan.TryParse(time.Text, out timeStart))
+            if (string.IsNullOrWhiteSpace(time.Text) || !TimeSpan.TryParse(time.Text, out timeStart))
             {
                 MessageBox.Show("Необходимо указать время начала аренды");
                 return;
             }
-            if (time_rent.Text == "" || DateTime.TryParse(time_rent.Text, out timeRent))
+            if (!TryParseDuration(time_rent.Text, out rentDuration))
             {
                 MessageBox.Show("Необходимо указать продолжительность аренды");
                 return;
             }
-            DateAndTimeStart = date.SelectedDate.Value.Date + timeStart;
-            if(PcRent == null)
+
+            DateTime DateAndTimeStart = date.SelectedDate.Value.Date + timeStart;
+            DateTime timeRent = DateTime.Today.Add(rentDuration);
+
+            if (PcRent == null)
             {
                 pcrentContext newPcRent = new pcrentContext(
                     0,
@@ -83,9 +86,8 @@ namespace PR28_Konevskii.Pages.pcrent
                     );
                 newPcRent.Add();
                 MessageBox.Show("Запись успешно добавлена");
-                MainWindow.init.OpenPage(new Pages.pcclub.Main());
-            
-        }
+                MainWindow.init.OpenPage(new Pages.pcrent.Main());
+            }
             else
             {
                 PcRent = new pcrentContext(
@@ -97,9 +99,35 @@ namespace PR28_Konevskii.Pages.pcrent
                     );
                 PcRent.Update();
                 MessageBox.Show("Запись успешно обновлена");
-                MainWindow.init.OpenPage(new Pages.pcclub.Main());
+                MainWindow.init.OpenPage(new Pages.pcrent.Main());
+            }
+        }
+
+        private static bool TryParseDuration(string text, out TimeSpan duration)
+        {
+            duration = TimeSpan.Zero;
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            string value = text.Trim();
+
+            if (value.Contains(":"))
+                return TimeSpan.TryParse(value, out duration)
+                    && duration > TimeSpan.Zero
+                    && duration < TimeSpan.FromDays(1);
+
+            if (!double.TryParse(value, NumberStyles.Number, CultureInfo.CurrentCulture, out double hours)
+                && !double.TryParse(value.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out hours))
+            {
+                return false;
             }
 
+            if (hours <= 0 || hours >= 24)
+                return false;
+
+            duration = TimeSpan.FromHours(hours);
+            return true;
         }
     }
 }

@@ -11,8 +11,8 @@ namespace PR28_Konevskii
         public MainWindow()
         {
             InitializeComponent();
-            OpenPage(new Pages.pcclub.Main());
             init = this;
+            OpenPage(new Pages.pcclub.Main());
         }
 
         public void OpenPage(Page page) =>

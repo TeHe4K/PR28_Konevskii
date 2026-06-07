@@ -15,6 +15,16 @@ namespace PR28_Konevskii.Classes.Common
         {
             return new MySqlCommand(SQL, connection).ExecuteReader();
         }
+        public static int Execute(string SQL, MySqlConnection connection, params MySqlParameter[] parameters)
+        {
+            using (MySqlCommand command = new MySqlCommand(SQL, connection))
+            {
+                if (parameters != null && parameters.Length > 0)
+                    command.Parameters.AddRange(parameters);
+
+                return command.ExecuteNonQuery();
+            }
+        }
         public static void CloseConection(MySqlConnection connection)
         {
             connection.Close();

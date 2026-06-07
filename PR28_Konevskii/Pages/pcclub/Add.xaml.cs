@@ -26,7 +26,7 @@ namespace PR28_Konevskii.Pages.pcclub
         {
             InitializeComponent();
 
-            if(PcClub != null)
+            if(pcClub != null)
             {
                 this.PcClub = pcClub;
                 name.Text = pcClub.name;
@@ -41,21 +41,21 @@ namespace PR28_Konevskii.Pages.pcclub
         {
             DateTime TimeStart;
             DateTime TimeEnd;
-            if (name.Text == "")
+            if (string.IsNullOrWhiteSpace(name.Text))
             {
                 MessageBox.Show("Необходимо указать наименование");
                 return;
             }
-            if(adres.Text == "")
+            if(string.IsNullOrWhiteSpace(adres.Text))
             {
                 MessageBox.Show("Необходимо указать адрес");
                 return;
             }
-            if(timeStart.Text == "" || DateTime.TryParse(timeStart.Text, out TimeStart)){
+            if(string.IsNullOrWhiteSpace(timeStart.Text) || !DateTime.TryParse(timeStart.Text, out TimeStart)){
                 MessageBox.Show("Необходимо указать время начала работы");
                 return;
             }
-            if (timeEnd.Text == "" || DateTime.TryParse(timeEnd.Text, out TimeEnd )){
+            if (string.IsNullOrWhiteSpace(timeEnd.Text) || !DateTime.TryParse(timeEnd.Text, out TimeEnd )){
                 MessageBox.Show("Необходимо указать время окончания работы");
                 return;
             }

@@ -18,5 +18,10 @@ namespace PR28_Konevskii.Models
             this.time_start = time_start;
             this.time_end = time_end;
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

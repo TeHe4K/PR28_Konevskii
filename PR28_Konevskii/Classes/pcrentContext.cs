@@ -24,7 +24,7 @@ namespace PR28_Konevskii.Classes
                     Data.GetInt32(1),
                     Data.GetString(2),
                     Data.GetDateTime(3),
-                    Data.GetDateTime(4)
+                    DateTime.Today.Add(Data.GetTimeSpan(4))
                     ));
             }
             Connection.CloseConection(connection);
@@ -33,41 +33,40 @@ namespace PR28_Konevskii.Classes
 
         public void Add()
         {
-            string SQL = "INSERT INTO `pcrent`( " +
-                            "`FIoKient`, " +
-                            "`idPcClub`, " +
-                            "`Date_Rent`, " +
-                            "`Time_Rent`, " +
-                        "VALUES ('" +
-                            $"{this.FioRent}'," +
-                            $"{this.Id_PcClub}', " + 
-                            $"'{this.DateRent.ToString("dd:MM:yyyy HH:mm")}'," +
-                            $"'{this.TimeRent.ToString("HH:mm")}')";
+            string SQL = "INSERT INTO `pcrent` (`FIoKient`, `idPcClub`, `Date_Rent`, `Time_Rent`) " +
+                         "VALUES (@fio, @idPcClub, @dateRent, @timeRent)";
             MySqlConnection connection = Connection.OpenConnection();
-            Connection.Query(SQL, connection);
+            Connection.Execute(
+                SQL,
+                connection,
+                new MySqlParameter("@fio", this.FioRent),
+                new MySqlParameter("@idPcClub", this.Id_PcClub),
+                new MySqlParameter("@dateRent", this.DateRent.ToString("yyyy-MM-dd HH:mm:ss")),
+                new MySqlParameter("@timeRent", this.TimeRent.ToString("HH:mm:ss")));
             Connection.CloseConection(connection);
         }
         public void Update()
         {
             string SQL = "UPDATE `pcrent` " +
-                        "SET " +
-                            $"`FIoKient`='{this.FioRent}'," +
-                            $"`idPcClub`='{this.Id_PcClub}'," +
-                            $"`Date_Rent`='{this.DateRent.ToString("dd:MM:yyyy HH:mm")}'," +
-                            $"`Time_Rent`='{this.TimeRent.ToString("HH:mm")}' " +
-                        "WHERE " +
-                            $"`id`='{this.Id}'";
+                         "SET `FIoKient`=@fio, `idPcClub`=@idPcClub, `Date_Rent`=@dateRent, `Time_Rent`=@timeRent " +
+                         "WHERE `id`=@id";
             MySqlConnection connection = Connection.OpenConnection();
-            Connection.Query(SQL, connection);
+            Connection.Execute(
+                SQL,
+                connection,
+                new MySqlParameter("@fio", this.FioRent),
+                new MySqlParameter("@idPcClub", this.Id_PcClub),
+                new MySqlParameter("@dateRent", this.DateRent.ToString("yyyy-MM-dd HH:mm:ss")),
+                new MySqlParameter("@timeRent", this.TimeRent.ToString("HH:mm:ss")),
+                new MySqlParameter("@id", this.Id));
             Connection.CloseConection(connection);
         }
 
         public void Delete()
         {
-            string SQL = "DELETE FROM `pcrent` WHERE " +
-                $"`id` = {this.Id}";
+            string SQL = "DELETE FROM `pcrent` WHERE `id`=@id";
             MySqlConnection connection = Connection.OpenConnection();
-            Connection.Query(SQL, connection);
+            Connection.Execute(SQL, connection, new MySqlParameter("@id", this.Id));
             Connection.CloseConection(connection);
         }
     
