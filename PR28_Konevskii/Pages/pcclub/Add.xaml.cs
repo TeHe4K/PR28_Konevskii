@@ -20,7 +20,7 @@ namespace PR28_Konevskii.Pages.pcclub
     /// </summary>
     public partial class Add : Page
     {
-        public Add()
+        public Add(Classes.pcclublContext pcClub)
         {
             InitializeComponent();
         }

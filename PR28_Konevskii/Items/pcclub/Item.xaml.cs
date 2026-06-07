@@ -1,19 +1,6 @@
 ﻿using PR28_Konevskii.Classes;
 using PR28_Konevskii.Pages.pcclub;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PR28_Konevskii.Items.pcclub
 {
@@ -22,13 +9,26 @@ namespace PR28_Konevskii.Items.pcclub
     /// </summary>
     public partial class Item : UserControl
     {
-        public Item()
+        pcclublContext PcClub;
+        Main main;
+        public Item(pcclublContext PcClub , Main main)
         {
             InitializeComponent();
+            name.Text = PcClub.name;
+            adres.Text = PcClub.adress;
+            timeStart.Text = PcClub.time_start.ToString("HH:mm");
+            timeEnd.Text = PcClub.time_end.ToString("HH:mm");
+            this.PcClub = PcClub;
+            this.main = main;
         }
 
-        public Item(pcclublContext items, Main main)
+        private void EditRecord(object sender, System.Windows.RoutedEventArgs e) =>
+            MainWindow.init.OpenPage(new Pages.pcclub.Add(PcClub));
+
+        private void DeleteRecord(object sender, System.Windows.RoutedEventArgs e)
         {
+            PcClub.Delete();
+            main.parent.Children.Remove(this);
         }
     }
 }
