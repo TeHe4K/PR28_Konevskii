@@ -1,4 +1,5 @@
 ﻿using PR28_Konevskii.Classes;
+using PR28_Konevskii.Pages.pcrent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +15,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PR28_Konevskii.Pages.pcrent
+namespace PR28_Konevskii.Items.pcrent
 {
     /// <summary>
-    /// Логика взаимодействия для Main.xaml
+    /// Логика взаимодействия для item.xaml
     /// </summary>
-    public partial class Main : Page
+    public partial class item : UserControl
     {
-        List<pcrentContext> AllPcRent = pcrentContext.Select();
-        public Main()
+        public item()
         {
             InitializeComponent();
-
-            foreach(pcrentContext items in AllPcRent)
-            {
-                parent.Children.Add(new Items.pcrent.item(items, this));
-            }
         }
 
-        private void AddRecord(object sender, RoutedEventArgs e)
+        public item(pcrentContext items, Main main)
         {
-            MainWindow.init.OpenPage(new Pages.pcrent.Add());
         }
     }
 }
