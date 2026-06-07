@@ -1,34 +1,37 @@
 ﻿using PR28_Konevskii.Classes;
 using PR28_Konevskii.Pages.pcrent;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PR28_Konevskii.Items.pcrent
 {
-    /// <summary>
-    /// Логика взаимодействия для item.xaml
-    /// </summary>
+    
     public partial class item : UserControl
     {
-        public item()
-        {
-            InitializeComponent();
-        }
-
+        List<pcclublContext> AllClubs = pcclublContext.Select();
+        pcrentContext items;
+        Main main;
         public item(pcrentContext items, Main main)
         {
+            InitializeComponent();
+            this.items = items;
+            this.main = main;
+            var PcClub = AllClubs.Find(x => x.id == items.Id_PcClub);
+            PcClubs.Items.Add(PcClub == null ? "" : PcClub.name);
+            PcClubs.SelectedIndex = 0;
+            FIO.Text = items.FioRent;
+            date.Text = items.DateRent.ToString("yyyy-MM-dd");
+            time.Text = items.DateRent.ToString("HH:mm");
+            Rent_Time.Text = items.TimeRent.ToString("HH:mm");
+        }
+
+        private void EditRecord(object sender, System.Windows.RoutedEventArgs e) =>
+            MainWindow.init.OpenPage(new Pages.pcrent.Add());
+
+        private void DeleteRecord(object sender, System.Windows.RoutedEventArgs e)
+        {
+            items.Delete();
+            main.parent.Children.Remove(this);
         }
     }
 }
