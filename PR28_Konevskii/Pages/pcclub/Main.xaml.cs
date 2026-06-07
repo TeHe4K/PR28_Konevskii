@@ -1,17 +1,6 @@
-﻿using System;
+﻿using PR28_Konevskii.Classes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PR28_Konevskii.Pages.pcclub
 {
@@ -20,9 +9,19 @@ namespace PR28_Konevskii.Pages.pcclub
     /// </summary>
     public partial class Main : Page
     {
+        List<pcclublContext> AllPcClubs = pcclublContext.Select();
         public Main()
         {
             InitializeComponent();
+            foreach (pcclublContext items in AllPcClubs)
+            {
+                parent.Children.Add(new Items.pcclub.Item(items, this));
+            }
+        }
+
+        private void AddRecord(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MainWindow.init.OpenPage(new Pages.pcclub.Add());
         }
     }
 }

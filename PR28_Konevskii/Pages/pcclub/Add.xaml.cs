@@ -13,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PR28_Konevskii.Pages.pcrent
+namespace PR28_Konevskii.Pages.pcclub
 {
     /// <summary>
-    /// Логика взаимодействия для Main.xaml
+    /// Логика взаимодействия для Add.xaml
     /// </summary>
-    public partial class Main : Page
+    public partial class Add : Page
     {
-        public Main()
+        public Add()
         {
             InitializeComponent();
-        }
-
-        private void AddRecord(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
