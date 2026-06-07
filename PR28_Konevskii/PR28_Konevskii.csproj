@@ -69,6 +69,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\pcclub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -98,7 +99,6 @@
     <Folder Include="Classes\Common\" />
     <Folder Include="Items\pcclub\" />
     <Folder Include="Items\pcrent\" />
-    <Folder Include="Models\" />
     <Folder Include="Pages\pcclub\" />
     <Folder Include="Pages\pcrent\" />
   </ItemGroup>
